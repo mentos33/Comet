@@ -1,2 +1,2 @@
 # Comet
-A Simple Scanning Tool
+A Simple Web Scanner
