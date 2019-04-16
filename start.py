@@ -1,8 +1,14 @@
 import argparse
+import logging
 
 
 
 
+
+'''
+comet 的入口
+
+'''
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', dest='url', help='URL of Target Website')
