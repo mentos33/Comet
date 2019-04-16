@@ -1,9 +1,9 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 #coding=utf-8
 import argparse
 import logging
-from urllib.parse import urlparse
-
+import urlparse
+from Spider.dynamic import link
 
 
 '''
@@ -30,11 +30,16 @@ parser.add_argument('-c', dest='cookies', help='add cookies')
 
 #save input args
 results = parser.parse_args()
-if results.url:
-    pass
-else:
+if not results.url:
     #logging()
     #print ('you could use [help] or [-h]')  不能输出？？
     print (results.url)
-    
 
+mylink = link(results.url)
+count = 0
+for url in mylink.get_links():
+    
+    assert isinstance(url, str),'link类返回的url不是字符串类型！！！'
+    print (url)
+    count +=1
+print (count)
