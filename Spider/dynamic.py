@@ -5,8 +5,8 @@ import requests
 
 #mechanize 帮助找到站内连接
 class link():
-    domains = []
-    largeNumberOfUrls = []
+    
+    
     
     def __init__(self, url):
         br = mechanize.Browser()
@@ -20,7 +20,7 @@ class link():
         self.br = br
         self.url = url
     def get_links(self):
-        
+        domains = []
         self.br.open(self.url)
         for link in self.br.links():
             if self.url in str(link.absolute_url):
@@ -29,8 +29,11 @@ class link():
         #logging(the num of links are : len(domains))
         return domains
     def get_all_links(self):
-        for link in self.get_links():
+        largeNumberOfUrls = []
+        domains = self.get_links()
+        for link in domains:
             self.br.open(link)
+            self.br._factory.is_html = True
             # going deeper into each link and finding its links
             for newlink in self.br.links():
                 if self.url in str(newlink.absolute_url):

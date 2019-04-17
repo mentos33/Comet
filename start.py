@@ -23,23 +23,33 @@ class color:
     def log(lvl, col, msg):
         logger.log(lvl, col + msg + color.END)
 
-#交互 接受参数
+#交互 接受参数  ''https:// 
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', dest='url', required=True ,help='URL of Target Website')
 parser.add_argument('-c', dest='cookies', help='add cookies')
+parser.add_argument('-e', action='store_true', dest='compOn',help='Enable comprehensive scan')
 
 #save input args
 results = parser.parse_args()
 if not results.url:
     #logging()
     #print ('you could use [help] or [-h]')  不能输出？？
-    print (results.url)
+    results.url
+
+###############################
+##link类
+##########################
 
 mylink = link(results.url)
 count = 0
-for url in mylink.get_links():
+alllinks = []
+if results.conpOn:
+    alllinks = mylink.get_all_links()
+else:
+    alllinks = mylink.get_links()
+for url in alllinks:
     
-    assert isinstance(url, str),'link类返回的url不是字符串类型！！！'
+    #assert isinstance(url, str),'link类返回的url不是字符串类型！！！'
     print (url)
     count +=1
 print (count)
