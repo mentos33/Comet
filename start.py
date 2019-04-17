@@ -3,13 +3,24 @@
 import argparse
 import logging
 import urlparse
+import os
+import json
 from Spider.dynamic import link
-
+from Scanner.xss import xss
 
 '''
 comet 的入口
 
 '''
+
+
+payloads = ['<svg "ons>', '" onfocus="alert(1);', 'javascript:alert(1)', '"><svg/onload=alert`1`>']
+
+blacklist = ['.png', '.jpg', '.jpeg', '.mp3', '.mp4', '.avi', '.gif', '.svg',
+             '.pdf']
+xssLinks = [] 
+
+xss_conf = 'xss_conf.json'
 
 class color:
     BLUE = '\033[94m'
@@ -43,13 +54,16 @@ if not results.url:
 mylink = link(results.url)
 count = 0
 alllinks = []
-if results.conpOn:
+if results.compOn:
     alllinks = mylink.get_all_links()
 else:
     alllinks = mylink.get_links()
-for url in alllinks:
+
+
+if alllinks:
+    if os.path.exists(xss_conf):
+        xss_conf = json.load(xss_conf)
+        # payloads,blacklist will changed ++++++++++++++++++++++++++++++
     
-    #assert isinstance(url, str),'link类返回的url不是字符串类型！！！'
-    print (url)
-    count +=1
-print (count)
+    xss = xss()
+    xss.find()
