@@ -18,7 +18,7 @@ payloads = ['<svg "ons>', '" onfocus="alert(1);', 'javascript:alert(1)', '"><svg
 
 blacklist = ['.png', '.jpg', '.jpeg', '.mp3', '.mp4', '.avi', '.gif', '.svg',
              '.pdf']
-xssLinks = [] 
+
 
 xss_conf = 'xss_conf.json'
 
@@ -59,11 +59,13 @@ if results.compOn:
 else:
     alllinks = mylink.get_links()
 
-
+print 'found num of url :'+str(len(alllinks))
 if alllinks:
     if os.path.exists(xss_conf):
         xss_conf = json.load(xss_conf)
         # payloads,blacklist will changed ++++++++++++++++++++++++++++++
     
-    xss = xss()
-    xss.find()
+    xss = xss(payloads, blacklist ,alllinks)
+    xssLinks = xss.findxss()
+    print 'xssLinks:'
+    print xssLinks

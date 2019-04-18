@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+#coding=utf-8
 import mechanize
 
 '''
@@ -19,7 +21,8 @@ class xss():
         self.payloads = payloads
         self.blacklist = blacklist
         self.urllist = urllist
-        self.xssLinks = []
+        self.xssLinks = ''
+
         br = mechanize.Browser()
         br.addheaders = [
             ('User-agent',
@@ -30,7 +33,8 @@ class xss():
 
         self.br = br
 
-    def _testpayload(self,payloads, p, link):
+    def _testPayload(self,payload, p, link):
+        
         self.br.form[str(p.name)] = payload
         self.br.submit()
         # if payload is found in response, we have XSS
@@ -39,11 +43,12 @@ class xss():
             report = 'Link: %s, Payload: %s, Element: %s' % (str(link),
                                                             payload, str(p.name))
             print 'report:  '+report
-            xssLinks.append(report)
+            self.xssLinks.append(report)
+        
         self.br.back()
     
     def findxss(self):
-        
+        self.xssLinks = []
 
         for link in self.urllist:
             blacklisted = False
@@ -65,11 +70,13 @@ class xss():
                             # submit only those forms which require text
                             if 'TextControl' in par:
                                 
-                                for item in payloads:
+                                for item in self.payloads:
                                     self._testPayload(item, p, link)
+        
                 except:
                     pass
         
-        for link in xssLinks:        # print all xss findings
-            pass
+        #for link in xssLinks:        # print all xss findings
+        #    pass
+        return self.xssLinks
 

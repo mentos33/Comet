@@ -38,6 +38,6 @@ class link():
             for newlink in self.br.links():
                 if self.url in str(newlink.absolute_url):
                     largeNumberOfUrls.append(newlink.absolute_url)
-        domains = list(set(domains + largeNumberOfUrls))
+        new_domains = list(set(domains + largeNumberOfUrls))
         #logging
-        return domains
+        return new_domains
