@@ -58,8 +58,10 @@ if results.compOn:
     alllinks = mylink.get_all_links()
 else:
     alllinks = mylink.get_links()
-
-print 'found num of url :'+str(len(alllinks))
+with open('url_list.txt','w') as f:
+    for _ in alllinks:
+        f.write(_+"\n")
+print 'num of links : '+str(len(alllinks))
 if alllinks:
     if os.path.exists(xss_conf):
         xss_conf = json.load(xss_conf)
