@@ -36,16 +36,22 @@ class color:
 
 #交互 接受参数  ''https:// 
 parser = argparse.ArgumentParser()
-parser.add_argument('-u', dest='url', required=True ,help='URL of Target Website')
+parser.add_argument('-u', dest='url', help='URL of Target Website')
 parser.add_argument('-c', dest='cookies', help='add cookies')
 parser.add_argument('-e', action='store_true', dest='compOn',help='Enable comprehensive scan')
 
+parser.add_argument("-t", dest="target", help="scan target website", metavar="www.example.com")
+
+
 #save input args
 results = parser.parse_args()
-if not results.url:
-    #logging()
-    #print ('you could use [help] or [-h]')  不能输出？？
-    results.url
+if results.url:
+    pass
+else:
+    parser.print_help()
+    os._exit(0)
+# -t  pass
+
 
 ###############################
 ##link类
@@ -55,6 +61,7 @@ mylink = link(results.url)
 count = 0
 alllinks = []
 if results.compOn:
+    print ('Doing a comprehensive traversal')
     alllinks = mylink.get_all_links()
 else:
     alllinks = mylink.get_links()

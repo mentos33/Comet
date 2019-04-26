@@ -13,7 +13,7 @@ blacklist = ['.png', '.jpg', '.jpeg', '.mp3', '.mp4', '.avi', '.gif', '.svg',
              '.pdf']
 xssLinks = [] 
 '''
-
+#"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0",
 class xss():
     '攻击器的属性就是攻击参数，同时排除干扰目标,拿到攻击目标'
     #初始化模拟器

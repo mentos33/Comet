@@ -32,12 +32,15 @@ class link():
         largeNumberOfUrls = []
         domains = self.get_links()
         for link in domains:
-            self.br.open(link)
-            self.br._factory.is_html = True
-            # going deeper into each link and finding its links
-            for newlink in self.br.links():
-                if self.url in str(newlink.absolute_url):
-                    largeNumberOfUrls.append(newlink.absolute_url)
+            try:
+                self.br.open(link)
+                self.br._factory.is_html = True
+                # going deeper into each link and finding its links
+                for newlink in self.br.links():
+                    if self.url in str(newlink.absolute_url):
+                        largeNumberOfUrls.append(newlink.absolute_url)
+            except:
+                pass
         new_domains = list(set(domains + largeNumberOfUrls))
         #logging
         return new_domains
