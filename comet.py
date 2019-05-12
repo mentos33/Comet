@@ -2,6 +2,7 @@
 #coding=utf-8
 import argparse
 import logging
+import requests
 from urlparse import urlparse
 import os
 import json
@@ -21,6 +22,8 @@ blacklist = ['.png', '.jpg', '.jpeg', '.mp3', '.mp4', '.avi', '.gif', '.svg',
 
 
 xss_conf = 'xss_conf.json'
+
+headers = {'User_Agent':"Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50"}
 
 class color:
     BLUE = '\033[94m'
@@ -70,9 +73,10 @@ if results.url and results.target:
     parser.print_help()
     os._exit(0)
 elif results.url:
+    format_url = check_url(results.url)
     if results.cookies:
         print ('use cookies :{0}'.format(results.cookies))
-    mylink = link(results.url)
+    mylink = link(format_url)
     count = 0
     alllinks = []
     if results.compOn:
@@ -95,7 +99,8 @@ elif results.url:
         print xssLinks
 elif results.target:
     ##singelscan()
-    vulnerables = singlescan(results.target)
+    format_url = check_url(results.target)
+    vulnerables = singlescan(format_url)
 
     if not vulnerables:
         exit(0)
@@ -106,3 +111,14 @@ elif results.target:
 else:
     parser.print_help()
     os._exit(0)
+
+def check_url(url):
+    if not url.startswith('http'):
+        url = 'http://'+str(url)
+    try:
+        r = requests.get(url.split('?')[0], headers = headers)
+        #r.status_code
+        my.log(INFO,'status_code:'+str(r.status_code))
+    except:
+        my.log(INFO,'url请求异常!')
+    return url
