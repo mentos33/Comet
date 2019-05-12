@@ -2,7 +2,7 @@
 #coding=utf-8
 import argparse
 import logging
-import urlparse
+from urlparse import urlparse
 import os
 import json
 from Spider.dynamic import link
@@ -42,7 +42,7 @@ parser.add_argument('-e', action='store_true', dest='compOn',help='Enable compre
 
 parser.add_argument("-t", dest="target", help="scan target website", metavar="www.example.com")
 
-
+##################################
 #save input args
 results = parser.parse_args()
 if results.url:
