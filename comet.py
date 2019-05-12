@@ -34,6 +34,17 @@ class color:
     def log(lvl, col, msg):
         logger.log(lvl, col + msg + color.END)
 
+
+logger = logging.getLogger(__name__)#实例化
+logger.setLevel(logging.DEBUG)#日志输出的等级
+
+lh = logging.StreamHandler()  # Handler for the logger  加控制台输出流处理器
+#lh.setlevel(logging.INFO)
+logger.addHandler(lh)
+formatter = logging.Formatter('[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y %b %d, %H:%M:%S')#设置输出格式
+lh.setFormatter(formatter)
+
+
 #交互 接受参数  ''https:// 
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', dest='url', help='URL of Target Website')
@@ -60,7 +71,7 @@ if results.url and results.target:
     os._exit(0)
 elif results.url:
     if results.cookies:
-        print ('use cookies :{0}'%results.cookies)
+        print ('use cookies :{0}'.format(results.cookies))
     mylink = link(results.url)
     count = 0
     alllinks = []
