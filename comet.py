@@ -58,6 +58,7 @@ parser.add_argument("-t", dest="target", help="scan the specified website", meta
 results = parser.parse_args()
 
 Explain='''
+
 Comet: A Simple Web Scanner Tool
 Author: mentos
 Email: mentos33@163.com
@@ -65,8 +66,9 @@ Usage: python comet.py help
 
 Comet is a simple tool for finding XSS and SQLI(SQL injection) in websites.
 You can check XSS by '-u'.Check SQLI by '-t'.
+
 '''
-my.log(logging.INFO, my.BLUE, Explain)
+my.log(logging.INFO, my.BOLD+my.GREEN, Explain)
 
 def check_url(url):
     if not url.startswith('http'):
