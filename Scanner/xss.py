@@ -39,10 +39,10 @@ class xss():
         self.br.submit()
         # if payload is found in response, we have XSS
         if payload in self.br.response().read():
-            print ('xss found!')
+            #print ('xss found!')
             report = 'Link: %s, Payload: %s, Element: %s' % (str(link),
                                                             payload, str(p.name))
-            print 'report:  '+report
+            #print 'report:  '+report
             self.xssLinks.append(report)
         
         self.br.back()
