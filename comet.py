@@ -62,7 +62,7 @@ Explain='''
 Comet: A Simple Web Scanner Tool
 Author: mentos
 Email: mentos33@163.com
-Usage: python comet.py help
+Usage: python comet.py --help
 
 Comet is a simple tool for finding XSS and SQLI(SQL injection) in websites.
 You can check XSS by '-u'.Check SQLI by '-t'.
