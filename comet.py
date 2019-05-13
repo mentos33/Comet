@@ -79,6 +79,7 @@ def check_url(url):
         my.log(logging.INFO, my.GREEN, 'status_code:'+str(r.status_code))
     except:
         my.log(logging.WARNING, my.RED, 'url请求异常!')
+        os._exit(-1)
     return url
 
 def singlescan(url):
