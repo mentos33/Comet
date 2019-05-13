@@ -25,7 +25,7 @@ xss_conf = 'xss_conf.json'
 
 headers = {'User_Agent':"Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50"}
 
-class color:
+class my:
     BLUE = '\033[94m'
     RED = '\033[91m'
     GREEN = '\033[92m'
@@ -35,7 +35,7 @@ class color:
 
     @staticmethod
     def log(lvl, col, msg):
-        logger.log(lvl, col + msg + color.END)
+        logger.log(lvl, col + msg + my.END)
 
 
 logger = logging.getLogger(__name__)#实例化
@@ -53,9 +53,31 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-u', dest='url', help='URL of Target Website')
 parser.add_argument('-c', dest='cookies', help='add cookies')
 parser.add_argument('-e', action='store_true', dest='compOn',help='Enable comprehensive scan')
-parser.add_argument("-t", dest="target", help="scan target website", metavar="www.example.com")
+parser.add_argument("-t", dest="target", help="scan the specified website", metavar="example.com?x=1")
 
 results = parser.parse_args()
+
+Explain='''
+Comet: A Simple Web Scanner Tool
+Author: mentos
+Email: mentos33@163.com
+Usage: python comet.py help
+
+Comet is a simple tool for finding XSS and SQLI(SQL injection) in websites.
+You can check XSS by '-u'.Check SQLI by '-t'.
+'''
+my.log(logging.INFO, my.BLUE, Explain)
+
+def check_url(url):
+    if not url.startswith('http'):
+        url = 'http://'+str(url)
+    try:
+        r = requests.get(url.split('?')[0], headers = headers)
+        #r.status_code
+        my.log(logging.INFO, my.GREEN, 'status_code:'+str(r.status_code))
+    except:
+        my.log(logging.WARNING, my.RED, 'url请求异常!')
+    return url
 
 def singlescan(url):
     "scan single targeted domain"
@@ -65,29 +87,34 @@ def singlescan(url):
         if result != []:
             return result
         else:
-            print ("no SQL injection vulnerability found")
+            my.log(logging.INFO, my.GREEN, "no SQL injection vulnerability found")
     else:
-        print ('please input url with params')
+        my.log(logging.ERROR, my.RED, 'parameters is required')
     return False
 if results.url and results.target:
     parser.print_help()
     os._exit(0)
 elif results.url:
+    if not results.url:
+        my.log(logging.WARNING, my.RED, 'url not null!')
+        os._exit(-1)
     format_url = check_url(results.url)
+    my.log(logging.INFO, my.GREEN, 'scanning {0}'.format(format_url))
     if results.cookies:
-        print ('use cookies :{0}'.format(results.cookies))
+        my.log(logging.INFO, my.BLUE, 'use cookies : {0}'.format(results.cookies))
     mylink = link(format_url)
     count = 0
     alllinks = []
     if results.compOn:
-        print ('Doing a comprehensive traversal')
+        my.log(logging.INFO, my.GREEN, 'Doing a comprehensive traversal')
         alllinks = mylink.get_all_links()
     else:
         alllinks = mylink.get_links()
     with open('url_list.txt','w') as f:
         for _ in alllinks:
             f.write(_+"\n")
-    print 'num of links : '+str(len(alllinks))
+    my.log(logging.INFO, my.YELLOW, 'num of links : {0}'.format(str(len(alllinks))))
+    #print 'num of links : '+str(len(alllinks))
     if alllinks:
         if os.path.exists(xss_conf):
             xss_conf = json.load(xss_conf)
@@ -95,30 +122,25 @@ elif results.url:
         
         xss = xss(payloads, blacklist ,alllinks)
         xssLinks = xss.findxss()
-        print 'xssLinks:'
-        print xssLinks
+        if xssLinks:
+            my.log(logging.INFO, my.BOLD + my.GREEN, 'xss found!')
+            for _ in xssLinks:
+                my.log(logging.INFO, my.BOLD + my.GREEN, _)
+        else:
+            my.log(logging.INFO, my.YELLOW, 'xss not found!')
 elif results.target:
     ##singelscan()
     format_url = check_url(results.target)
+    my.log(logging.INFO, my.GREEN, 'scanning {0}'.format(format_url))
     vulnerables = singlescan(format_url)
 
     if not vulnerables:
-        exit(0)
-    
-    
-    print ('vulnerables: '+vulnerables)
-    exit(0)
+        os._exit(0)
+    my.log(logging.INFO, my.YELLOW, format_url+'is vulnerable')
+    for _ in vulnerables:
+        my.log(logging.INFO, my.BLUE, 'vulnerables: '+str(_))
+    os._exit(0)
 else:
     parser.print_help()
     os._exit(0)
 
-def check_url(url):
-    if not url.startswith('http'):
-        url = 'http://'+str(url)
-    try:
-        r = requests.get(url.split('?')[0], headers = headers)
-        #r.status_code
-        my.log(INFO,'status_code:'+str(r.status_code))
-    except:
-        my.log(INFO,'url请求异常!')
-    return url
