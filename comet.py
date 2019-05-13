@@ -109,6 +109,7 @@ elif results.url:
     alllinks = []
     if results.compOn:
         my.log(logging.INFO, my.GREEN, 'Doing a comprehensive traversal')
+        my.log(logging.INFO, my.GREEN, 'It may take a few moments')
         alllinks = mylink.get_all_links()
     else:
         alllinks = mylink.get_links()
@@ -138,7 +139,7 @@ elif results.target:
 
     if not vulnerables:
         os._exit(0)
-    my.log(logging.INFO, my.YELLOW, format_url+'is vulnerable')
+    my.log(logging.INFO, my.YELLOW, format_url+' is vulnerable')
     for _ in vulnerables:
         my.log(logging.INFO, my.BLUE, 'vulnerables: '+str(_))
     os._exit(0)
